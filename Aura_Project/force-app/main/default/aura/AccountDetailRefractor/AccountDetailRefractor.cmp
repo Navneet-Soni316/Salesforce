@@ -1,0 +1,12 @@
+<aura:component implements = "force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access = "global" >
+    <aura:attribute name = "account" type = "Object" />
+    <article style ="border : 1px solid #E3DDDC; width : 250px; margin : 20px; padding : 20px; height : 200px" class ="slds-card" >
+        <lightning:icon iconName = "standard : account" size = "large" alternativeText = "Indicates approval"/>
+        <div  class = "slds-card__body slds-card__body_inner" >
+            <h2> Account Name : <a  target = "_blank" href = "{!'https://resilient-hawk-l5ixef-dev-ed.trailblaze.lightning.force.com//' + v.account.Id}">{!v.account.Name}</a></h2>
+            <h2> Account Number : {!v.account.AccountNumber} </h2>
+            <h2>Industry : {!v.account.Industry}</h2>
+            <h2>Phone : {!v.account.Phone}</h2>
+        </div>
+    </article>
+</aura:component>
