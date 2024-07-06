@@ -1,0 +1,72 @@
+<aura:component controller="AccountDetailController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+   
+    <aura:attribute name = "emptyList" type = "List"/>
+    <aura:attribute name = "filteredResult" type = "List"/>
+    <aura:attribute name = "searchKeyword" type = "String" />
+    <aura:attribute name = "pageNumber" type = "integer" default = "1"/>
+    <aura:attribute name = "pageSize" type = "integer" default = "3"/>
+    <aura:attribute name = "totalPages" type = "integer" />
+    <aura:attribute name = "totalRecords" type = "integer" />
+    <aura:attribute name = "recordStart" type = "integer" />
+    <aura:attribute name = "recordEnd" type = "integer" />
+    <aura:attribute name = "AllRecords" type = "List"/>
+    <aura:attribute name = "UiData" type = "List"/>
+    <aura:attribute name = "FieldArray" type = "Account[]"/>
+    <aura:handler name = "init" value = "{!this}" action = "{!c.doInit}" />
+    <lightning:input type = "text" name = "searchKey" aura:id = "searchKey" value = "{!v.searchKeyword}" onchange = "{!c.searchKeyChange}" placeholder = "Search the content" style = "width: 400px"/>  
+    <aura:attribute name = "sortOption" type = "String" />
+    <aura:attribute name = "sortOptionAfterSearch" type = "String" />
+    <div class = "sortAll" style = "width:200px">
+        <lightning:select label = "Sort By" value = "{!v.sortOption}" onchange = "{!c.handleSort}" >
+            <option value = ""> Choose One </option>
+            <option value = "NameAsc"> Name (A-Z) </option>
+            <option value = "NameDesc"> Name (Z-A) </option>
+            <option value = "AccountNumberAsc"> Account Number Asc </option>
+            <option value = "AccountNumberDesc"> Account Number Desc </option>
+            <option value = "PhoneAsc"> Phone (0-9) </option>
+            <option value = "PhoneDesc"> Phone (9-0) </option>
+            <option value = "IndustryAsc"> Industry (A-Z) </option>
+            <option value = "IndustryDesc"> Industry (Z-A) </option>
+        </lightning:select>
+    </div>
+    <div class="slds-col slds-size_2-of-2" style="width:200px">
+        <lightning:select label = "After Search Sort By"  value = "{!v.sortOptionAfterSearch}"  onchange = "{!c.handleSortAfterSearch}" >
+            <option value = ""> Choose One </option>
+            <option value = "NameAsc"> Name (A-Z) </option>
+            <option value = "NameDesc"> Name (Z-A) </option>
+            <option value = "AccountNumberAsc"> Account Number Asc </option>
+            <option value = "AccountNumberDesc"> Account Number Desc </option>
+            <option value = "PhoneAsc"> Phone (0-9) </option>
+            <option value = "PhoneDesc"> Phone (9-0) </option>
+            <option value = "IndustryAsc"> Industry (A-Z) </option>
+            <option value = "IndustryDesc"> Industry (Z-A) </option>
+        </lightning:select>
+    </div>
+    <lightning:card title = "AccountDetail">
+        <aura:set attribute = "footer">
+            <div class = "slds-align_absolute-center">
+                <div class = "slds-p-right_xx-small">
+                    <lightning:button label = "Prev" onclick = "{!c.handlePrev}" disabled = "{!v.pageNumber == 1 ||  v.pageNumber == 0 || v.UiData.length == 0 }" variant = "brand"  iconName = "utility:back"  name = "prev"/>                    
+                </div>
+                <span class="slds-badge slds-badge_lightest">
+                    {!v.recordStart}-{!v.recordEnd} of {!v.totalRecords} | Page {!v.pageNumber} of {!v.totalPages}
+                </span>
+                <div class = "slds-p-left_xx-small">
+                    <lightning:button label = "Next" disabled = "{!v.pageNumber == v.totalPages || v.pageNumber == 0 || v.UiData.length == 0  ||  v.UiData.length == v.filteredResult.length }"  onclick = "{!c.handleNext}" variant = "brand" iconName = "utility:forward" iconPosition = "right" name = "next"/>                    
+                </div>
+            </div>
+        </aura:set>
+        <aura:if isTrue = "{!not(empty(v.UiData))}" >
+            <aura:iteration items = "{!v.UiData}" var = "item">
+                <lightning:card>
+                    <c:AccountDetailRefractor account = "{!item. acc}" ></c:AccountDetailRefractor>
+                </lightning:card>
+            </aura:iteration>
+        </aura:if>
+        <aura:if isTrue = "{!v.UiData.length == 0}">
+            <center>
+                <p><b>No result found</b></p>
+            </center>
+        </aura:if>
+    </lightning:card>
+</aura:component>
